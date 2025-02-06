@@ -133,6 +133,7 @@ module.exports = function (Topics) {
 	};
 
 	async function renameTag(tag, newTagName) {
+		console.log('Alondra Isabella Robles');
 		if (!newTagName || tag === newTagName) {
 			return;
 		}
@@ -141,7 +142,15 @@ module.exports = function (Topics) {
 		await Topics.createEmptyTag(newTagName);
 		const allCids = {};
 
-		await batch.processSortedSet(`tag:${tag}:topics`, async (tids) => {
+		function updateTag(topic) {
+			topic.tags = topic.tags.map(tagItem => tagItem.value);
+			const index = topic.tags.indexOf(tag);
+			if (index !== -1) {
+				topic.tags.splice(index, 1, newTagName);
+			}
+		}
+
+		async function updateCidAndTag(tids) {
 			const topicData = await Topics.getTopicsFields(tids, ['tid', 'cid', 'tags']);
 			const cids = topicData.map(t => t.cid);
 			topicData.forEach((t) => { allCids[t.cid] = true; });
@@ -157,17 +166,13 @@ module.exports = function (Topics) {
 			await db.sortedSetRemove(cids.map(cid => `cid:${cid}:tag:${tag}:topics`), tids);
 
 			// update 'tags' field in topic hash
-			topicData.forEach((topic) => {
-				topic.tags = topic.tags.map(tagItem => tagItem.value);
-				const index = topic.tags.indexOf(tag);
-				if (index !== -1) {
-					topic.tags.splice(index, 1, newTagName);
-				}
-			});
+			topicData.forEach(updateTag);
 			await db.setObjectBulk(
 				topicData.map(t => [`topic:${t.tid}`, { tags: t.tags.join(',') }]),
 			);
-		}, {});
+		}
+
+		await batch.processSortedSet(`tag:${tag}:topics`, updateCidAndTag, {});
 		const followers = await db.getSortedSetRangeWithScores(`tag:${tag}:followers`, 0, -1);
 		if (followers.length) {
 			const userKeys = followers.map(item => `uid:${item.value}:followed_tags`);

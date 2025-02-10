@@ -161,12 +161,18 @@ User.isGlobalModerator = async function (uid) {
 	return await privileges.users.isGlobalModerator(uid);
 };
 
+User.isInstructor = async function (uid) {
+    const isInstructor = await db.getObjectField(`user:${uid}`, 'isInstructor');
+    return isInstructor === '1';
+};
+
 User.getPrivileges = async function (uid) {
-	return await utils.promiseParallel({
-		isAdmin: User.isAdministrator(uid),
-		isGlobalModerator: User.isGlobalModerator(uid),
-		isModeratorOfAnyCategory: User.isModeratorOfAnyCategory(uid),
-	});
+    return await utils.promiseParallel({
+        isAdmin: User.isAdministrator(uid) || User.isInstructor(uid), // Instructors as admins
+        isGlobalModerator: User.isGlobalModerator(uid),
+        isInstructor: User.isInstructor(uid), // Keep instructor role check
+        isModeratorOfAnyCategory: User.isModeratorOfAnyCategory(uid),
+    });
 };
 
 User.isPrivileged = async function (uid) {

@@ -13,9 +13,6 @@
 		{./descriptionParsed}
 	</div>
 	{{{ end }}}
-	<div class="category-search-container d-flex justify-content-center mt-2">
-	    <input type="text" id="category-search" placeholder="Search topics..." class="form-control w-50">
-	</div>
 	<div class="d-flex flex-wrap gap-2 {{{ if config.theme.centerHeaderElements }}}justify-content-center{{{ end }}}">
 		<span class="badge text-body border border-gray-300 stats text-xs">
 			<span title="{totalTopicCount}" class="fw-bold">{humanReadableNumber(totalTopicCount)}</span>
@@ -25,6 +22,9 @@
 			<span title="{totalPostCount}" class="fw-bold">{humanReadableNumber(totalPostCount)}</span>
 			<span class="text-lowercase fw-normal">[[global:posts]]</span>
 		</span>
+	</div>
+	<div class="category-search-container d-flex justify-content-center mt-2">
+	    <input type="text" id="category-search" placeholder="Search topics..." class="form-control w-50">
 	</div>
 </div>
 

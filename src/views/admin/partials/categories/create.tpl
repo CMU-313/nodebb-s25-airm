@@ -26,4 +26,10 @@
 			<label for="disabled" class="form-check-label">[[admin/manage/categories:disable-on-create]]</label>
 		</div>
 	</div>
+
+	<div class="mb-3">
+		<label class="form-label" for="create-tag-name">Folder Names</label>
+		<input type="text" class="form-control" id="create-tag-name" placeholder="Enter Folders, 3-15 Characters" />
+	</div>
+
 </form>

@@ -66,7 +66,7 @@
 		</div>
 		{{{ end }}}
 		<div class="content mt-2 text-break" component="post/content" itemprop="text">
-			{posts.content}
+		{posts.content}
 		</div>
 	</div>
 </div>

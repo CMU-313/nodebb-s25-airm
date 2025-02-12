@@ -25,6 +25,10 @@
 			</div>
 
 			<a class="fw-bold text-nowrap" href="{{{ if ./user.userslug }}}{config.relative_path}/user/{./user.userslug}{{{ else }}}#{{{ end }}}" data-username="{posts.user.username}" data-uid="{posts.user.uid}">{posts.user.displayname}</a>
+			{{{ if posts.official }}}
+			<span class="badge bg-success text-white ms-2">Official Answer</span>
+			{{{ end }}}
+
 
 			{{{ each posts.user.selectedGroups }}}
 			{{{ if posts.user.selectedGroups.slug }}}
@@ -92,11 +96,15 @@
 
 	<div component="post/replies/container" class="my-2 col-11 border rounded-1 p-3 hidden-empty"></div>
 
+
+	
 	<div component="post/actions" class="d-flex justify-content-end gap-1 post-tools">
 		<!-- IMPORT partials/topic/reactions.tpl -->
 		<a component="post/reply" href="#" class="btn-ghost-sm {{{ if !privileges.topics:reply }}}hidden{{{ end }}}" title="[[topic:reply]]"><i class="fa fa-fw fa-reply text-primary"></i></a>
 		<a component="post/quote" href="#" class="btn-ghost-sm {{{ if !privileges.topics:reply }}}hidden{{{ end }}}" title="[[topic:quote]]"><i class="fa fa-fw fa-quote-right text-primary"></i></a>
-
+		<a component="post/mark-as-official" href="#" class="btn-ghost-sm text-success" title="Mark as Official">
+    	<i class="fa fa-check-circle"></i> Mark as Official
+<		/a>
 		{{{ if !reputation:disabled }}}
 		<div class="d-flex votes align-items-center">
 			<a component="post/upvote" href="#" class="btn-ghost-sm{{{ if posts.upvoted }}} upvoted{{{ end }}}" title="[[topic:upvote-post]]">

@@ -71,6 +71,12 @@ define('forum/register', [
 
 				registerBtn.addClass('disabled');
 
+				// Get the value of the isInstructor checkbox
+				const isInstructorChecked = $('#isInstructor').prop('checked') ? 'on' : 'off';
+				// Add the isInstructor value to the form data
+				const formData = new FormData(registerBtn.parents('form')[0]);
+				formData.append('isInstructor', isInstructorChecked);
+
 				registerBtn.parents('form').ajaxSubmit({
 					headers: {
 						'x-csrf-token': config.csrf_token,

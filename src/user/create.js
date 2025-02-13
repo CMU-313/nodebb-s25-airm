@@ -49,7 +49,7 @@ module.exports = function (User) {
 			joindate: timestamp,
 			lastonline: timestamp,
 			status: 'online',
-			isInstructor: data.isInstructor ? 1 : 0, // Store isInstructor flag
+			isInstructor: (data.isInstructor === 'on' || data.isInstructor === true || data.isInstructor === 'true') ? 1 : 0,
 		};
 		['picture', 'fullname', 'location', 'birthday'].forEach((field) => {
 			if (data[field]) {

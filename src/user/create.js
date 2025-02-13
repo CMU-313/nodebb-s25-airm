@@ -108,12 +108,10 @@ module.exports = function (User) {
 		if (userData.isInstructor) {
 			await groups.join('administrators', userData.uid);
 		}
-	
 		if (data.email && isFirstUser) {
 			await User.setUserField(uid, 'email', data.email);
 			await User.email.confirmByUid(userData.uid);
 		}
-	
 		if (data.email && userData.uid > 1) {
 			await User.email.sendValidationEmail(userData.uid, {
 				email: data.email,

@@ -29,7 +29,7 @@
 
 	<div class="mb-3">
 		<label class="form-label" for="create-folder-name">Folder Names</label>
-		<input type="text" class="form-control" id="create-folder-name" placeholder="Enter Folders, 3-15 Characters" />
+		<input type="text" class="form-control" id="create-folder-name" placeholder="[[admin/manage/folders:create-folder]]" />
 	</div>
 
 </form>

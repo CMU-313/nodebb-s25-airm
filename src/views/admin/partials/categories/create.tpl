@@ -28,8 +28,8 @@
 	</div>
 
 	<div class="mb-3">
-		<label class="form-label" for="create-folder-name">Folder Names</label>
-		<input type="text" class="form-control" id="create-folder-name" placeholder="[[admin/manage/folders:create-folder]]" />
+		<label class="form-label" for="tag-whitelist">[[admin/manage/categories:tag-whitelist]]</label>
+		<input id="tag-whitelist" type="text" class="form-control" data-name="tagWhitelist" value="" />
 	</div>
 
 </form>

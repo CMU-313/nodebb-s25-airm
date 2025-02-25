@@ -26,4 +26,10 @@
 			<label for="disabled" class="form-check-label">[[admin/manage/categories:disable-on-create]]</label>
 		</div>
 	</div>
+
+	<div class="mb-3">
+		<label class="form-label" for="tag-whitelist">(Optional) [[admin/manage/categories:tag-whitelist]]</label>
+		<input id="tag-whitelist" type="text" class="form-control" data-name="tagWhitelist" value="" />
+	</div>
+
 </form>

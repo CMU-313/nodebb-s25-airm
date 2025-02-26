@@ -98,6 +98,7 @@ define('admin/manage/categories', [
 	};
 
 	Categories.throwCreateModal = function () {
+		console.log("In Throw Create Modal");
 		Benchpress.render('admin/partials/categories/create', {}).then(function (html) {
 			const modal = bootbox.dialog({
 				title: '[[admin/manage/categories:alert.create]]',
@@ -120,6 +121,8 @@ define('admin/manage/categories', [
 				],
 				template: 'admin/partials/category/selector-dropdown-left',
 			};
+			console.log("above handle tags")
+			handleTags();
 			const parentSelector = categorySelector.init(modal.find('#parentCidGroup [component="category-selector"]'), options);
 			const cloneFromSelector = categorySelector.init(modal.find('#cloneFromCidGroup [component="category-selector"]'), options);
 			function submit() {
@@ -152,6 +155,7 @@ define('admin/manage/categories', [
 	};
 
 	Categories.create = function (payload) {
+		console.log("In categories.create function");
 		api.post('/categories', payload, function (err, data) {
 			if (err) {
 				return alerts.error(err);
@@ -243,6 +247,15 @@ define('admin/manage/categories', [
 		}
 	}
 
+	function handleTags() {
+		console.log("inside handling tags");
+		const tagEl = $('#tag-whitelist');
+		tagEl.tagsinput({
+			tagClass: 'badge bg-info',
+			confirmKeys: [13, 44],
+			trimValue: true,
+		});
+	}
 	/**
 	 * Render categories - recursively
 	 *

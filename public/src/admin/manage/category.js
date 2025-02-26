@@ -288,7 +288,6 @@ define('admin/manage/category', [
 		});
 
 		ajaxify.data.category.tagWhitelist.forEach(function (tag) {
-			console.log(tag)
 			tagEl.tagsinput('add', tag);
 		});
 

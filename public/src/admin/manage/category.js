@@ -51,6 +51,7 @@ define('admin/manage/category', [
 			template: 'admin/partials/category/selector-dropdown-right',
 		});
 
+		console.log("Above handling tags");
 		handleTags();
 
 		categorySettings.find('input, select, textarea').on('change', function (ev) {
@@ -280,6 +281,7 @@ define('admin/manage/category', [
 	}
 
 	function handleTags() {
+		console.log("inside handling tags");
 		const tagEl = $('#tag-whitelist');
 		tagEl.tagsinput({
 			tagClass: 'badge bg-info',

@@ -66,7 +66,7 @@
 
 				<div class="mb-3">
 					<label class="form-label" for="tag-whitelist">[[admin/manage/categories:tag-whitelist]]</label>
-					<input id="tag-whitelist" type="text" class="form-control" data-name="tagWhitelist" value="" />
+					<input id="tag-whitelist" type="text" class="form-control" name="tagWhitelist" data-name="tagWhitelist" value="" />
 				</div>
 
 				<div class="mb-3 d-flex flex-column">

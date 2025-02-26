@@ -98,7 +98,6 @@ define('admin/manage/categories', [
 	};
 
 	Categories.throwCreateModal = function () {
-		console.log("In Throw Create Modal");
 		Benchpress.render('admin/partials/categories/create', {}).then(function (html) {
 			const modal = bootbox.dialog({
 				title: '[[admin/manage/categories:alert.create]]',
@@ -127,22 +126,21 @@ define('admin/manage/categories', [
 			const parentSelector = categorySelector.init(modal.find('#parentCidGroup [component="category-selector"]'), options);
 			const cloneFromSelector = categorySelector.init(modal.find('#cloneFromCidGroup [component="category-selector"]'), options);
 			function submit() {
-				console.log("In submit function");
 				const tags = $('.tag')
 				// Use .map() to iterate through the elements and extract the inner text
 				const tagList = tags.map(function() {
 					return $(this).text(); // Extract the inner text of each element
   				}).get(); // .get() converts the jQuery object into a regular array
+			
 				const formData = modal.find('form').serializeObject();
-				console.log(formData);
 				formData.description = '';
 				formData.icon = 'fa-comments';
 				formData.uid = app.user.uid;
 				formData.parentCid = parentSelector.getSelectedCid();
 				formData.cloneFromCid = cloneFromSelector.getSelectedCid();
 				formData.tagWhitelist = tagList;
-				console.log(formData);
-				Categories.create(formData);
+
+				Categories.create(formData);				
 				modal.modal('hide');
 				return false;
 			}
@@ -164,7 +162,6 @@ define('admin/manage/categories', [
 	};
 
 	Categories.create = function (payload) {
-		console.log("In categories.create function");
 		api.post('/categories', payload, function (err, data) {
 			if (err) {
 				return alerts.error(err);
@@ -257,7 +254,6 @@ define('admin/manage/categories', [
 	}
 
 	function handleTags() {
-		console.log("IN HANDLES TAG");
 		const tagEl = $('#tag-whitelist');
 		tagEl.tagsinput({
 			tagClass: 'badge bg-info',

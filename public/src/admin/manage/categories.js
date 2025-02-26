@@ -121,18 +121,27 @@ define('admin/manage/categories', [
 				],
 				template: 'admin/partials/category/selector-dropdown-left',
 			};
-			console.log("above handle tags")
+
 			handleTags();
+
 			const parentSelector = categorySelector.init(modal.find('#parentCidGroup [component="category-selector"]'), options);
 			const cloneFromSelector = categorySelector.init(modal.find('#cloneFromCidGroup [component="category-selector"]'), options);
 			function submit() {
+				console.log("In submit function");
+				const tags = $('.tag')
+				// Use .map() to iterate through the elements and extract the inner text
+				const tagList = tags.map(function() {
+					return $(this).text(); // Extract the inner text of each element
+  				}).get(); // .get() converts the jQuery object into a regular array
 				const formData = modal.find('form').serializeObject();
+				console.log(formData);
 				formData.description = '';
 				formData.icon = 'fa-comments';
 				formData.uid = app.user.uid;
 				formData.parentCid = parentSelector.getSelectedCid();
 				formData.cloneFromCid = cloneFromSelector.getSelectedCid();
-
+				formData.tagWhitelist = tagList;
+				console.log(formData);
 				Categories.create(formData);
 				modal.modal('hide');
 				return false;
@@ -248,7 +257,7 @@ define('admin/manage/categories', [
 	}
 
 	function handleTags() {
-		console.log("inside handling tags");
+		console.log("IN HANDLES TAG");
 		const tagEl = $('#tag-whitelist');
 		tagEl.tagsinput({
 			tagClass: 'badge bg-info',
@@ -256,6 +265,7 @@ define('admin/manage/categories', [
 			trimValue: true,
 		});
 	}
+
 	/**
 	 * Render categories - recursively
 	 *

@@ -46,6 +46,7 @@ searchApi.categories = async (caller, data) => {
 			category.match = true;
 		}
 	});
+
 	const result = await plugins.hooks.fire('filter:categories.categorySearch', {
 		categories: categoriesData,
 		...data,

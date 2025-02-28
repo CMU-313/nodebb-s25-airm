@@ -99,8 +99,8 @@
       "\" class=\"post-index text-muted d-none d-md-inline\">#" + 
       __escape(helper(context, helpers, 'increment', [guard((context != null) ? context['index'] : null), "1"])) + 
       "</a>\n</div>\n</div>\n" + 
-      (guard((context != null) ? context['true'] : null) ?
-        "  <!-- This will always show the badge for testing -->\n<div class=\"official-badge text-success fw-bold mb-2\">\n<i class=\"fa fa-check-circle\"></i> Official Answer\n</div>\n" :
+      (guard((context != null && context['posts'] != null) ? context['posts']['official'] : null) ?
+        "\n<div class=\"official-badge text-success fw-bold mb-2\">\n<i class=\"fa fa-check-circle\"></i> Official Answer\n</div>\n" :
         "") + 
       "\n<div class=\"content mt-2 text-break\" component=\"post/content\" itemprop=\"text\">\n" + 
       __escape(guard((context != null && context['posts'] != null) ? context['posts']['content'] : null)) + 

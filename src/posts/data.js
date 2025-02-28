@@ -51,8 +51,20 @@ module.exports = function (Posts) {
 
 
 
-	Posts.getPostsData = async function (pids) {
-		return await Posts.getPostsFields(pids, []);
+	Posts.getPostData = async function (pid, uid) {
+		const posts = await Posts.getPostsFields([pid], ['official']); // Fetch 'official' field
+		
+		if (!posts || !posts.length) {
+			return null;
+		}
+	
+		const post = posts[0];
+		post.isAdmin = await user.isAdministrator(uid);
+		
+		// Convert "official" value to a boolean
+		post.official = post.official === '1'; 
+	
+		return post;
 	};
 
 	Posts.getPostField = async function (pid, field) {

@@ -51,7 +51,7 @@
 <a href="{config.relative_path}/post/{./pid}" class="post-index text-muted d-none d-md-inline">#{increment(./index, "1")}</a>
 </div>
 </div>
-{{{ if true }}}  <!-- This will always show the badge for testing -->
+{{{ if posts.official }}}
 <div class="official-badge text-success fw-bold mb-2">
 <i class="fa fa-check-circle"></i> Official Answer
 </div>

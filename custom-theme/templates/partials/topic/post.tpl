@@ -60,11 +60,11 @@
 		</div>
 
 
-		{{{ if true }}}  <!-- This will always show the badge for testing -->
-		<div class="official-badge text-success fw-bold mb-2">
-    	<i class="fa fa-check-circle"></i> Official Answer
-		</div>
-		{{{ end }}}
+		{{{ if posts.official }}}
+<div class="official-badge text-success fw-bold mb-2">
+    <i class="fa fa-check-circle"></i> Official Answer
+</div>
+{{{ end }}}
 		<div class="content mt-2 text-break" component="post/content" itemprop="text">
 		{posts.content}
 		</div>

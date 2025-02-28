@@ -6,7 +6,6 @@ const winston = require('winston');
 const semver = require('semver');
 const nconf = require('nconf');
 const chalk = require('chalk');
-const express = require('express'); // Added for API routing
 
 const request = require('../request');
 const user = require('../user');
@@ -68,21 +67,6 @@ Plugins.requireLibrary = function (pluginData) {
 
 	Plugins.libraryPaths.push(libraryPath);
 };
-
-// Create an API router and define your search endpoint
-const apiRouter = express.Router();
-const search = require('../api/search');
-
-apiRouter.get('/search/topics', async (req, res) => {
-	try {
-		const { query, cid } = req.query;
-		const result = await search.topics({ uid: req.uid }, { query, cid });
-		return res.json(result);
-	} catch (err) {
-		winston.error('[api/search/topics] Error:', err);
-		return res.status(500).json({ error: err.message });
-	}
-});
 
 Plugins.init = async function (nbbApp, nbbMiddleware) {
 	if (Plugins.initialized) {
@@ -350,5 +334,3 @@ async function isDirectory(dirPath) {
 }
 
 require('../promisify')(Plugins);
-
-module.exports = Plugins;

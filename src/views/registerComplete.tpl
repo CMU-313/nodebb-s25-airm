@@ -41,6 +41,3 @@
 		</div>
 	</div>
 </form>
-<div class="search-container">
-    <input type="text" id="category-search" placeholder="Search topics..." class="form-control">
-</div>

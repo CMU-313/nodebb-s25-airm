@@ -33,7 +33,7 @@ describe('Search Topics API', () => {
 	describe('Valid Search Queries', () => {
 		it('should return matching topics for a valid search query', async () => {
 			const { cid } = testCategory;
-			const query = 'Test Topic'; // Expected to exist in setup
+			const query = 'Test'; // Expected to exist in setup
 			const url = `${nconf.get('url')}/api/search/topics?cid=${cid}&query=${encodeURIComponent(query)}`;
 
 			const result = await request.get(url, { jar });
@@ -89,7 +89,7 @@ describe('Search Topics API', () => {
 	describe('Case Insensitivity', () => {
 		it('should return results regardless of case differences', async () => {
 			const { cid } = testCategory;
-			const query = 'test topic'; // Should match "Test Topic"
+			const query = 'test'; // Should match "Test Topic"
 			const url = `${nconf.get('url')}/api/search/topics?cid=${cid}&query=${encodeURIComponent(query)}`;
 
 			const result = await request.get(url, { jar });

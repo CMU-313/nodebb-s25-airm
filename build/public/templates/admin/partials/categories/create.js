@@ -74,7 +74,7 @@
       }, function alt() {
         return "";
       }) + 
-      "\n</ul>\n</div>\n</div>\n<div class=\"form-check form-switch\">\n<input class=\"form-check-input \"id=\"cloneChildren\" name=\"cloneChildren\" type=\"checkbox\">\n<label for=\"cloneChildren\" class=\"form-check-label\">[[admin/manage/categories:clone-children]]</label>\n</div>\n</div>\n<div class=\"mb-3\">\n<div class=\"form-check form-switch\">\n<input class=\"form-check-input \"id=\"disabled\" name=\"disabled\" type=\"checkbox\">\n<label for=\"disabled\" class=\"form-check-label\">[[admin/manage/categories:disable-on-create]]</label>\n</div>\n</div>\n</form>";
+      "\n</ul>\n</div>\n</div>\n<div class=\"form-check form-switch\">\n<input class=\"form-check-input \"id=\"cloneChildren\" name=\"cloneChildren\" type=\"checkbox\">\n<label for=\"cloneChildren\" class=\"form-check-label\">[[admin/manage/categories:clone-children]]</label>\n</div>\n</div>\n<div class=\"mb-3\">\n<div class=\"form-check form-switch\">\n<input class=\"form-check-input \"id=\"disabled\" name=\"disabled\" type=\"checkbox\">\n<label for=\"disabled\" class=\"form-check-label\">[[admin/manage/categories:disable-on-create]]</label>\n</div>\n</div>\n<div class=\"mb-3\">\n<label class=\"form-label\" for=\"tag-whitelist\">[[admin/manage/categories:tag-whitelist]]</label>\n<input id=\"tag-whitelist\" type=\"text\" class=\"form-control\" data-name=\"tagWhitelist\" value=\"\" />\n</div>\n</form>";
   }
 
   compiled.blocks = {

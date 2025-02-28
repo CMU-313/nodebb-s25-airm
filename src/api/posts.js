@@ -23,7 +23,8 @@ const postsAPI = module.exports;
 postsAPI.get = async function (caller, data) {
 	const [userPrivileges, post, voted] = await Promise.all([
 		privileges.posts.get([data.pid], caller.uid),
-		posts.getPostData(data.pid),
+		// posts.getPostData(data.pid),
+		posts.getPostData(data.pid, data.uid),
 		posts.hasVoted(data.pid, caller.uid),
 	]);
 	const userPrivilege = userPrivileges[0];

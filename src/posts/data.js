@@ -1,3 +1,4 @@
+
 'use strict';
 
 const db = require('../database');
@@ -26,10 +27,29 @@ module.exports = function (Posts) {
 		return result.posts;
 	};
 
-	Posts.getPostData = async function (pid) {
+	const user = require('../user'); // Ensure user module is included
+
+	Posts.getPostData = async function (pid, uid) {
+		console.log(`DEBUG: Fetching post data for pid=${pid}, uid=${uid}`);
+	
 		const posts = await Posts.getPostsFields([pid], []);
-		return posts && posts.length ? posts[0] : null;
+		if (!posts || !posts.length) {
+			console.log(`DEBUG: No post found for pid=${pid}`);
+			return null;
+		}
+	
+		const post = posts[0];
+		
+		// ✅ Check if the user is an admin and store it in the post data
+		post.isAdmin = await user.isAdministrator(uid); 
+	
+		console.log(`DEBUG: Post ${pid} - isAdmin=${post.isAdmin}`);
+	
+		return post;
 	};
+	
+
+
 
 	Posts.getPostsData = async function (pids) {
 		return await Posts.getPostsFields(pids, []);

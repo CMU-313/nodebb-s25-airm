@@ -144,7 +144,11 @@
       (guard((context != null && context['privileges'] != null) ? context['privileges']['topics:reply'] : null) ?
         "" :
         "hidden") + 
-      "\" title=\"[[topic:quote]]\"><i class=\"fa fa-fw fa-quote-right text-primary\"></i></a>\n<a component=\"post/mark-as-official\" href=\"#\" class=\"btn-ghost-sm text-success\" title=\"Mark as Official\">\n<i class=\"fa fa-check-circle\"></i> Mark as Official\n</a>\n" + 
+      "\" title=\"[[topic:quote]]\"><i class=\"fa fa-fw fa-quote-right text-primary\"></i></a>\n" + 
+      (guard((context != null) ? context['isAdmin'] : null) ?
+        "\n<a component=\"post/mark-as-official\" href=\"#\" class=\"btn-ghost-sm text-success\" title=\"Mark as Official\">\n<i class=\"fa fa-check-circle\"></i> Mark as Official\n</a>\n" :
+        "") + 
+      "\n" + 
       (guard((context != null) ? context['reputation:disabled'] : null) ?
         "" :
         "\n<div class=\"d-flex votes align-items-center\">\n<a component=\"post/upvote\" href=\"#\" class=\"btn-ghost-sm" + 

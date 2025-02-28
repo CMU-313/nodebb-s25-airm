@@ -100,8 +100,7 @@ Plugins.init = async function (nbbApp, nbbMiddleware) {
 
 	await Plugins.reload();
 
-	// Mount the API routes at the '/api' base path, making the 
-	// /api/search/topics route available.
+	// Mount the API routes at the '/api' base path, making the /api/search/topics route available
 	if (app && typeof app.use === 'function') {
 		app.use('/api', apiRouter);
 	} else {

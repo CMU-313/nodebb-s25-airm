@@ -3,9 +3,7 @@
 const _ = require('lodash');
 
 const db = require('../database');
-const user = require('../user');
 const categories = require('../categories');
-const messaging = require('../messaging');
 const privileges = require('../privileges');
 const meta = require('../meta');
 const plugins = require('../plugins');
@@ -107,86 +105,67 @@ async function loadCids(uid, parentCid) {
 	return resultCids;
 }
 
-searchApi.roomUsers = async (caller, { query, roomId }) => {
-	const [isAdmin, inRoom, isRoomOwner] = await Promise.all([
-		user.isAdministrator(caller.uid),
-		messaging.isUserInRoom(caller.uid, roomId),
-		messaging.isRoomOwner(caller.uid, roomId),
-	]);
+searchApi.topics = async (caller, data) => {
+	try {
+		let { query, cid } = data;
 
-	if (!isAdmin && !inRoom) {
-		throw new Error('[[error:no-privileges]]');
-	}
-
-	const results = await user.search({
-		query,
-		paginate: false,
-		hardCap: -1,
-		uid: caller.uid,
-	});
-
-	const { users } = results;
-	const foundUids = users.map(user => user && user.uid);
-	const isUidInRoom = _.zipObject(
-		foundUids,
-		await messaging.isUsersInRoom(foundUids, roomId)
-	);
-
-	const roomUsers = users.filter(user => isUidInRoom[user.uid]);
-	const isOwners = await messaging.isRoomOwner(roomUsers.map(u => u.uid), roomId);
-
-	roomUsers.forEach((user, index) => {
-		if (user) {
-			user.isOwner = isOwners[index];
-			user.canKick = isRoomOwner && (parseInt(user.uid, 10) !== parseInt(caller.uid, 10));
+		if (!query) {
+			throw new Error('Search query is required');
 		}
-	});
 
-	roomUsers.sort((a, b) => {
-		if (a.isOwner && !b.isOwner) {
-			return -1;
-		} else if (!a.isOwner && b.isOwner) {
-			return 1;
-		}
-		return 0;
-	});
+		cid = parseInt(cid, 10) || 0;
 
-	return { users: roomUsers };
-};
-
-searchApi.roomMessages = async (caller, { query, roomId, uid }) => {
-	const [roomData, inRoom] = await Promise.all([
-		messaging.getRoomData(roomId),
-		messaging.isUserInRoom(caller.uid, roomId),
-	]);
-
-	if (!roomData) {
-		throw new Error('[[error:no-room]]');
-	}
-	if (!inRoom) {
-		throw new Error('[[error:no-privileges]]');
-	}
-	const { ids } = await plugins.hooks.fire('filter:messaging.searchMessages', {
-		content: query,
-		roomId: [roomId],
-		uid: [uid],
-		matchWords: 'any',
-		ids: [],
-	});
-
-	let userjoinTimestamp = 0;
-	if (!roomData.public) {
-		userjoinTimestamp = await db.sortedSetScore(`chat:room:${roomId}:uids`, caller.uid);
-	}
-	let messageData = await messaging.getMessagesData(ids, caller.uid, roomId, false);
-	messageData = messageData
-		.map((msg) => {
-			if (msg) {
-				msg.newSet = true;
+		if (cid !== 0) {
+			const canRead = await privileges.categories.can('topics:read', cid, caller.uid);
+			if (!canRead) {
+				throw new Error('[[error:no-privileges]]');
 			}
-			return msg;
-		})
-		.filter(msg => msg && !msg.deleted && msg.timestamp > userjoinTimestamp);
+		}
 
-	return { messages: messageData };
+		if (cid === 0) {
+			throw new Error('Global searching is not implemented in this snippet.');
+		}
+
+		// 1. Get topic IDs in the category
+		const topicIds = await db.getSortedSetRange(`cid:${cid}:tids`, 0, -1);
+		console.log(`[searchApi.topics] Found topic IDs in cid:${cid}:tids ->`, topicIds);
+
+		if (!topicIds || !topicIds.length) {
+			console.log('[searchApi.topics] No topics found for that category. Returning empty list.');
+			return { topics: [] };
+		}
+
+		// 2. Load each topic object
+		const rawTopics = await Promise.all(topicIds.map(async (tid) => {
+			const topicObj = await db.getObject(`topic:${tid}`);
+			return topicObj ? { tid, ...topicObj } : null;
+		}));
+
+		const validTopics = rawTopics.filter(Boolean);
+		console.log('[searchApi.topics] Valid topics loaded:', validTopics.map(t => ({
+			tid: t.tid,
+			title: t.title,
+		})));
+
+		// 3. Filter by the user’s query (convert to lowercase)
+		const searchLower = query.toLowerCase();
+		const matchedTopics = validTopics.filter(topic => topic.title && topic.title.toLowerCase().includes(searchLower));
+
+		console.log(`[searchApi.topics] Topics matching "${query}":`, matchedTopics.map(t => ({
+			tid: t.tid,
+			title: t.title,
+		})));
+
+		// 4. Let plugins do additional filtering if needed
+		const result = await plugins.hooks.fire('filter:topics.search', {
+			topics: matchedTopics,
+			...data,
+			uid: caller.uid,
+		});
+
+		return { topics: result.topics };
+	} catch (error) {
+		console.error('Search topics error:', error);
+		throw error;
+	}
 };

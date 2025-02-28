@@ -3,7 +3,9 @@
 const _ = require('lodash');
 
 const db = require('../database');
+const user = require('../user');
 const categories = require('../categories');
+const messaging = require('../messaging');
 const privileges = require('../privileges');
 const meta = require('../meta');
 const plugins = require('../plugins');
@@ -46,6 +48,7 @@ searchApi.categories = async (caller, data) => {
 			category.match = true;
 		}
 	});
+
 	const result = await plugins.hooks.fire('filter:categories.categorySearch', {
 		categories: categoriesData,
 		...data,
@@ -105,6 +108,90 @@ async function loadCids(uid, parentCid) {
 	return resultCids;
 }
 
+searchApi.roomUsers = async (caller, { query, roomId }) => {
+	const [isAdmin, inRoom, isRoomOwner] = await Promise.all([
+		user.isAdministrator(caller.uid),
+		messaging.isUserInRoom(caller.uid, roomId),
+		messaging.isRoomOwner(caller.uid, roomId),
+	]);
+
+	if (!isAdmin && !inRoom) {
+		throw new Error('[[error:no-privileges]]');
+	}
+
+	const results = await user.search({
+		query,
+		paginate: false,
+		hardCap: -1,
+		uid: caller.uid,
+	});
+
+	const { users } = results;
+	const foundUids = users.map(user => user && user.uid);
+	const isUidInRoom = _.zipObject(
+		foundUids,
+		await messaging.isUsersInRoom(foundUids, roomId)
+	);
+
+	const roomUsers = users.filter(user => isUidInRoom[user.uid]);
+	const isOwners = await messaging.isRoomOwner(roomUsers.map(u => u.uid), roomId);
+
+	roomUsers.forEach((user, index) => {
+		if (user) {
+			user.isOwner = isOwners[index];
+			user.canKick = isRoomOwner && (parseInt(user.uid, 10) !== parseInt(caller.uid, 10));
+		}
+	});
+
+	roomUsers.sort((a, b) => {
+		if (a.isOwner && !b.isOwner) {
+			return -1;
+		} else if (!a.isOwner && b.isOwner) {
+			return 1;
+		}
+		return 0;
+	});
+
+	return { users: roomUsers };
+};
+
+searchApi.roomMessages = async (caller, { query, roomId, uid }) => {
+	const [roomData, inRoom] = await Promise.all([
+		messaging.getRoomData(roomId),
+		messaging.isUserInRoom(caller.uid, roomId),
+	]);
+
+	if (!roomData) {
+		throw new Error('[[error:no-room]]');
+	}
+	if (!inRoom) {
+		throw new Error('[[error:no-privileges]]');
+	}
+	const { ids } = await plugins.hooks.fire('filter:messaging.searchMessages', {
+		content: query,
+		roomId: [roomId],
+		uid: [uid],
+		matchWords: 'any',
+		ids: [],
+	});
+
+	let userjoinTimestamp = 0;
+	if (!roomData.public) {
+		userjoinTimestamp = await db.sortedSetScore(`chat:room:${roomId}:uids`, caller.uid);
+	}
+	let messageData = await messaging.getMessagesData(ids, caller.uid, roomId, false);
+	messageData = messageData
+		.map((msg) => {
+			if (msg) {
+				msg.newSet = true;
+			}
+			return msg;
+		})
+		.filter(msg => msg && !msg.deleted && msg.timestamp > userjoinTimestamp);
+
+	return { messages: messageData };
+};
+
 searchApi.topics = async (caller, data) => {
 	try {
 		let { query, cid } = data;
@@ -123,7 +210,7 @@ searchApi.topics = async (caller, data) => {
 		}
 
 		if (cid === 0) {
-			throw new Error('Global searching is not implemented in this snippet.');
+			return { topics: [] };
 		}
 
 		// 1. Get topic IDs in the category

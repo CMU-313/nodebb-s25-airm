@@ -11,19 +11,29 @@ let jar;
 
 describe('Search Topics API', () => {
 	before(async () => {
-		await helpers.setupData();
+		// Log in as admin
 		({ jar } = await helpers.loginUser('admin', '123456'));
 
-		// Find test category by name "test"
+		// Ensure a test category exists
 		const allCats = await categories.getCategoriesData();
 		testCategory = allCats.find(cat => cat.name.toLowerCase() === 'test');
+
+		// If the test category doesn't exist, create it
+		if (!testCategory) {
+			testCategory = await categories.create({
+				name: 'Test',
+				description: 'Category for testing search API',
+				order: 1,
+			});
+		}
+
 		assert(testCategory, 'Test category was not created');
 	});
 
 	describe('Valid Search Queries', () => {
 		it('should return matching topics for a valid search query', async () => {
 			const { cid } = testCategory;
-			const query = 'Test Topic'; // Expected to exist in setupData
+			const query = 'Test Topic'; // Expected to exist in setup
 			const url = `${nconf.get('url')}/api/search/topics?cid=${cid}&query=${encodeURIComponent(query)}`;
 
 			const result = await request.get(url, { jar });
@@ -42,13 +52,12 @@ describe('Search Topics API', () => {
 	describe('Invalid Search Queries', () => {
 		it('should return no matching topics for a non-existent query', async () => {
 			const { cid } = testCategory;
-			const query = 'NonExistentTopic123456'; // This title should not exist
+			const query = 'NonExistentTopic123456';
 			const url = `${nconf.get('url')}/api/search/topics?cid=${cid}&query=${encodeURIComponent(query)}`;
 
 			const result = await request.get(url, { jar });
 			assert.strictEqual(result.response.statusCode, 200, `Expected status code 200, got ${result.response.statusCode}`);
 
-			// Verify response structure
 			const { body } = result;
 			assert(body.topics && Array.isArray(body.topics), 'Response should include a topics array');
 			assert.strictEqual(body.topics.length, 0, 'Expected no matching topics, but some were found');

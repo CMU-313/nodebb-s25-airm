@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - build/public/17205.32137195e6c5247c00e0.min.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>build/public/17205.32137195e6c5247c00e0.min.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">75.97</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">1</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">50.82</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">2.76</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">&quot;use strict&quot;;(self.webpackChunknodebb=self.webpackChunknodebb||[]).push([[17205,38395,34405],{17205:(h,E,m)=&gt;{var g,r;g=[m(16227),m(34405),m(29930)],r=function(d,o,l){const _={};let i,a,t=0;_.init=function(u){i||app.parseAndTranslate(&quot;modals/change-owner&quot;,{},function(f){i=f,a=i.find(&quot;#change_owner_commit&quot;),$(&quot;body&quot;).append(i),i.find(&quot;#change_owner_cancel&quot;).on(&quot;click&quot;,p),i.find(&quot;#username&quot;).on(&quot;keyup&quot;,e),d.init(n,{allowMainPostSelect:!0}),s(),u&amp;&amp;d.togglePostSelection(u,u.attr(&quot;data-pid&quot;)),a.on(&quot;click&quot;,function(){c()}),o.user(i.find(&quot;#username&quot;),{filters:[&quot;notbanned&quot;]},function(b,k){t=k.item.user.uid,e()})})};function s(){d.pids.length?i.find(&quot;#pids&quot;).translateHtml(&quot;[[topic:fork-pid-count, &quot;+d.pids.length+&quot;]]&quot;):i.find(&quot;#pids&quot;).translateHtml(&quot;[[topic:fork-no-pids]]&quot;)}function e(){t&amp;&amp;i.find(&quot;#username&quot;).length&amp;&amp;i.find(&quot;#username&quot;).val().length&amp;&amp;d.pids.length?a.removeAttr(&quot;disabled&quot;):a.attr(&quot;disabled&quot;,!0)}function n(){e(),s()}function c(){t&amp;&amp;socket.emit(&quot;posts.changeOwner&quot;,{pids:d.pids,toUid:t},function(u){if(u)return l.error(u);ajaxify.go(`/post/${d.pids[0]}`),p()})}function p(){i&amp;&amp;(i.remove(),i=null,d.disable())}return _}.apply(E,g),r!==void 0&amp;&amp;(h.exports=r)},34405:(h,E,m)=&gt;{var g,r;g=[m(49897),m(29930)],r=function(d,o){const l={},_={delay:200,appendTo:null};l.init=a=&gt;{const t={..._,...a},{input:s,onSelect:e}=t;app.loadJQueryUI(function(){s.autocomplete({...t,open:function(){$(this).autocomplete(&quot;widget&quot;).css(&quot;z-index&quot;,100005)},select:function(n,c){i(s,e,n,c)}})})},l.user=function(a,t,s){typeof t==&quot;function&quot;&amp;&amp;(s=t,t={}),t=t||{},l.init({input:a,onSelect:s,source:(e,n)=&gt;{t.query=e.term,d.get(&quot;/api/users&quot;,t,function(c,p){if(c)return o.error(c);if(p&amp;&amp;p.users){const u=p.users.map(function(f){const b=$(&quot;&lt;div&gt;&lt;/div&gt;&quot;).html(f.username).text();return f&amp;&amp;{label:b,value:b,user:{uid:f.uid,name:f.username,slug:f.userslug,username:f.username,userslug:f.userslug,picture:f.picture,banned:f.banned,&quot;icon:text&quot;:f[&quot;icon:text&quot;],&quot;icon:bgColor&quot;:f[&quot;icon:bgColor&quot;]}}});n(u)}$(&quot;.ui-autocomplete a&quot;).attr(&quot;data-ajaxify&quot;,&quot;false&quot;)})}})},l.group=function(a,t){l.init({input:a,onSelect:t,source:(s,e)=&gt;{socket.emit(&quot;groups.search&quot;,{query:s.term},function(n,c){if(n)return o.error(n);if(c&amp;&amp;c.length){const p=c.map(function(u){return u&amp;&amp;{label:u.name,value:u.name,group:u}});e(p)}$(&quot;.ui-autocomplete a&quot;).attr(&quot;data-ajaxify&quot;,&quot;false&quot;)})}})},l.tag=function(a,t){l.init({input:a,onSelect:t,delay:100,source:(s,e)=&gt;{socket.emit(&quot;topics.autocompleteTags&quot;,{query:s.term,cid:ajaxify.data.cid||0},function(n,c){if(n)return o.error(n);c&amp;&amp;e(c),$(&quot;.ui-autocomplete a&quot;).attr(&quot;data-ajaxify&quot;,&quot;false&quot;)})}})};function i(a,t,s,e){t=t||function(){};const n=jQuery.Event(&quot;keypress&quot;);n.which=13,n.keyCode=13,setTimeout(function(){a.trigger(n)},100),t(s,e)}return l}.apply(E,g),r!==void 0&amp;&amp;(h.exports=r)},16227:(h,E,m)=&gt;{var g,r;g=[m(52473)],r=function(d){const o={};let l;o.pids=[];let _=!1;o.init=function(e,n){o.pids.length=0,l=e,n=n||{},_=n.allowMainPostSelect||!1,$(&quot;#content&quot;).on(&quot;click&quot;,&#039;[component=&quot;topic&quot;] [component=&quot;post&quot;]&#039;,i),t()};function i(e){e.stopPropagation();const n=$(this).attr(&quot;data-pid&quot;),c=$(&#039;[component=&quot;topic&quot;] [data-pid=&quot;&#039;+n+&#039;&quot;]&#039;);!_&amp;&amp;parseInt($(this).attr(&quot;data-index&quot;),10)===0||o.togglePostSelection(c,n)}o.disable=function(){o.pids.forEach(function(e){d.get(&quot;post&quot;,&quot;pid&quot;,e).toggleClass(&quot;selected&quot;,!1)}),$(&quot;#content&quot;).off(&quot;click&quot;,&#039;[component=&quot;topic&quot;] [component=&quot;post&quot;]&#039;,i),s()},o.togglePostSelection=function(e,n){if(n){const c=o.pids.indexOf(n);c===-1?(o.pids.push(n),e.toggleClass(&quot;selected&quot;,!0)):(o.pids.splice(c,1),e.toggleClass(&quot;selected&quot;,!1)),o.pids.length&amp;&amp;o.pids.sort(function(p,u){return p-u}),typeof l==&quot;function&quot;&amp;&amp;l()}};function a(){return!1}function t(){$(&quot;#content&quot;).on(&quot;click&quot;,&#039;[component=&quot;post&quot;] button, [component=&quot;post&quot;] a&#039;,a)}function s(){$(&quot;#content&quot;).off(&quot;click&quot;,&#039;[component=&quot;post&quot;] button, [component=&quot;post&quot;] a&#039;,a)}return o}.apply(E,g),r!==void 0&amp;&amp;(h.exports=r)}}]);</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ cyclomatic }} <br>
+    Length : {{ halstead.length }} <br>
+    Difficulty : {{ halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

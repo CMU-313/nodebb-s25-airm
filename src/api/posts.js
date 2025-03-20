@@ -23,7 +23,7 @@ const postsAPI = module.exports;
 
 router.post('/post/:pid/mark-official', async (req, res) => {
     try {
-        const uid = req.user?.uid;  // Get the user ID
+        const uid = req.user && req.user.uid;  // Get the user ID
         const pid = req.params.pid; // Get the post ID from URL
         const { official } = req.body; // Get the "official" status from request body
 

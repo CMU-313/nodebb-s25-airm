@@ -142,15 +142,13 @@ function getFontawesomeStyle() {
 
 async function copyFontAwesomeFiles() {
 	await mkdirp(path.join(__dirname, '../../build/public/fontawesome/webfonts'));
-	const fonts = await fs.promises.opendir(path.join(utils.getFontawesomePath(), '/webfonts'));
-	const copyOperations = [];
-	for await (const file of fonts) {
-		if (file.isFile() && file.name.match(/\.(woff2|ttf|eot)?$/)) { // there shouldn't be any legacy eot files, but just in case we'll allow it
-			copyOperations.push(
-				fs.promises.copyFile(path.join(fonts.path, file.name), path.join(__dirname, '../../build/public/fontawesome/webfonts/', file.name))
-			);
-		}
-	}
+	const fontFiles = await fs.promises.readdir(path.join(utils.getFontawesomePath(), '/webfonts'), { withFileTypes: true });
+	const copyOperations = fontFiles
+		.filter(file => file.isFile() && /\.(woff2|ttf|eot)$/.test(file.name)) // Only include valid font files
+		.map(file => fs.promises.copyFile(
+			path.join(utils.getFontawesomePath(), '/webfonts', file.name),
+			path.join(__dirname, '../../build/public/fontawesome/webfonts/', file.name)
+		));
 	await Promise.all(copyOperations);
 }
 

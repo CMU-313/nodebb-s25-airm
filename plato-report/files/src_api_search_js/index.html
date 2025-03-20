@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">67.54</p>
+      <p class="stat">66.44</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">192</p>
+      <p class="stat">258</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">37.98</p>
+      <p class="stat">44.94</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">2.33</p>
+      <p class="stat">3.07</p>
     </div>
   </div>
 </div>
@@ -139,6 +139,7 @@ searchApi.categories = async (caller, data) =&gt; {
 			category.match = true;
 		}
 	});
+
 	const result = await plugins.hooks.fire(&#039;filter:categories.categorySearch&#039;, {
 		categories: categoriesData,
 		...data,
@@ -280,6 +281,71 @@ searchApi.roomMessages = async (caller, { query, roomId, uid }) =&gt; {
 		.filter(msg =&gt; msg &amp;&amp; !msg.deleted &amp;&amp; msg.timestamp &gt; userjoinTimestamp);
 
 	return { messages: messageData };
+};
+
+searchApi.topics = async (caller, data) =&gt; {
+	try {
+		let { query, cid } = data;
+
+		if (!query) {
+			throw new Error(&#039;Search query is required&#039;);
+		}
+
+		cid = parseInt(cid, 10) || 0;
+
+		if (cid !== 0) {
+			const canRead = await privileges.categories.can(&#039;topics:read&#039;, cid, caller.uid);
+			if (!canRead) {
+				throw new Error(&#039;[[error:no-privileges]]&#039;);
+			}
+		}
+
+		if (cid === 0) {
+			return { topics: [] };
+		}
+
+		// 1. Get topic IDs in the category
+		const topicIds = await db.getSortedSetRange(`cid:${cid}:tids`, 0, -1);
+		console.log(`[searchApi.topics] Found topic IDs in cid:${cid}:tids -&gt;`, topicIds);
+
+		if (!topicIds || !topicIds.length) {
+			console.log(&#039;[searchApi.topics] No topics found for that category. Returning empty list.&#039;);
+			return { topics: [] };
+		}
+
+		// 2. Load each topic object
+		const rawTopics = await Promise.all(topicIds.map(async (tid) =&gt; {
+			const topicObj = await db.getObject(`topic:${tid}`);
+			return topicObj ? { tid, ...topicObj } : null;
+		}));
+
+		const validTopics = rawTopics.filter(Boolean);
+		console.log(&#039;[searchApi.topics] Valid topics loaded:&#039;, validTopics.map(t =&gt; ({
+			tid: t.tid,
+			title: t.title,
+		})));
+
+		// 3. Filter by the user’s query (convert to lowercase)
+		const searchLower = query.toLowerCase();
+		const matchedTopics = validTopics.filter(topic =&gt; topic.title &amp;&amp; topic.title.toLowerCase().includes(searchLower));
+
+		console.log(`[searchApi.topics] Topics matching &quot;${query}&quot;:`, matchedTopics.map(t =&gt; ({
+			tid: t.tid,
+			title: t.title,
+		})));
+
+		// 4. Let plugins do additional filtering if needed
+		const result = await plugins.hooks.fire(&#039;filter:topics.search&#039;, {
+			topics: matchedTopics,
+			...data,
+			uid: caller.uid,
+		});
+
+		return { topics: result.topics };
+	} catch (error) {
+		console.error(&#039;Search topics error:&#039;, error);
+		throw error;
+	}
 };</textarea>
   </div>
 </div>

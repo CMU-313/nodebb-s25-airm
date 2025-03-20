@@ -17,6 +17,8 @@ const privileges = require('../privileges');
 const apiHelpers = require('./helpers');
 const websockets = require('../socket.io');
 const socketHelpers = require('../socket.io/helpers');
+const express = require('express');
+const router = express.Router();
 
 const postsAPI = module.exports;
 

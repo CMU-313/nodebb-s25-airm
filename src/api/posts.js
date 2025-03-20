@@ -20,10 +20,39 @@ const socketHelpers = require('../socket.io/helpers');
 
 const postsAPI = module.exports;
 
+
+router.post('/post/:pid/mark-official', async (req, res) => {
+    try {
+        const uid = req.user?.uid;  // Get the user ID
+        const pid = req.params.pid; // Get the post ID from URL
+        const { official } = req.body; // Get the "official" status from request body
+
+        if (!uid) {
+            return res.status(401).json({ error: 'You must be logged in to do this.' });
+        }
+
+        // Check if the user is an admin
+        const isAdmin = await user.isAdministrator(uid);
+        if (!isAdmin) {
+            return res.status(403).json({ error: 'Only admins can mark posts as official.' });
+        }
+
+        // Store the new official status in the database
+        await Posts.setPostField(pid, 'official', official ? '1' : '0');
+
+        return res.json({ success: true, official: Boolean(official) });
+
+    } catch (error) {
+        console.error('Error marking post as official:', error);
+        res.status(500).json({ error: 'An error occurred' });
+    }
+});
+
 postsAPI.get = async function (caller, data) {
 	const [userPrivileges, post, voted] = await Promise.all([
 		privileges.posts.get([data.pid], caller.uid),
-		posts.getPostData(data.pid),
+		// posts.getPostData(data.pid),
+		posts.getPostData(data.pid, data.uid),
 		posts.hasVoted(data.pid, caller.uid),
 	]);
 	const userPrivilege = userPrivileges[0];

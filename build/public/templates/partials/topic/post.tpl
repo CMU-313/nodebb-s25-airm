@@ -51,7 +51,7 @@
 <a href="{config.relative_path}/post/{./pid}" class="post-index text-muted d-none d-md-inline">#{increment(./index, "1")}</a>
 </div>
 </div>
-{{{ if true }}}  <!-- This will always show the badge for testing -->
+{{{ if posts.official }}}
 <div class="official-badge text-success fw-bold mb-2">
 <i class="fa fa-check-circle"></i> Official Answer
 </div>
@@ -87,9 +87,11 @@
 <!-- This partial intentionally left blank; overwritten by nodebb-plugin-reactions -->
 <a component="post/reply" href="#" class="btn-ghost-sm {{{ if !privileges.topics:reply }}}hidden{{{ end }}}" title="[[topic:reply]]"><i class="fa fa-fw fa-reply text-primary"></i></a>
 <a component="post/quote" href="#" class="btn-ghost-sm {{{ if !privileges.topics:reply }}}hidden{{{ end }}}" title="[[topic:quote]]"><i class="fa fa-fw fa-quote-right text-primary"></i></a>
+{{{ if isAdmin }}}
 <a component="post/mark-as-official" href="#" class="btn-ghost-sm text-success" title="Mark as Official">
 <i class="fa fa-check-circle"></i> Mark as Official
 </a>
+{{{ end }}}
 {{{ if !reputation:disabled }}}
 <div class="d-flex votes align-items-center">
 <a component="post/upvote" href="#" class="btn-ghost-sm{{{ if posts.upvoted }}} upvoted{{{ end }}}" title="[[topic:upvote-post]]">

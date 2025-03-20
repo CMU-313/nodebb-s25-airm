@@ -1,3 +1,4 @@
+
 'use strict';
 
 const db = require('../database');
@@ -26,13 +27,44 @@ module.exports = function (Posts) {
 		return result.posts;
 	};
 
-	Posts.getPostData = async function (pid) {
-		const posts = await Posts.getPostsFields([pid], []);
-		return posts && posts.length ? posts[0] : null;
-	};
+	const user = require('../user'); // Ensure user module is included
 
-	Posts.getPostsData = async function (pids) {
-		return await Posts.getPostsFields(pids, []);
+	Posts.getPostData = async function (pid, uid) {
+		console.log(`DEBUG: Fetching post data for pid=${pid}, uid=${uid}`);
+	
+		const posts = await Posts.getPostsFields([pid], []);
+		if (!posts || !posts.length) {
+			console.log(`DEBUG: No post found for pid=${pid}`);
+			return null;
+		}
+	
+		const post = posts[0];
+		
+		// ✅ Check if the user is an admin and store it in the post data
+		post.isAdmin = await user.isAdministrator(uid); 
+	
+		console.log(`DEBUG: Post ${pid} - isAdmin=${post.isAdmin}`);
+	
+		return post;
+	};
+	
+
+
+
+	Posts.getPostData = async function (pid, uid) {
+		const posts = await Posts.getPostsFields([pid], ['official']); // Fetch 'official' field
+		
+		if (!posts || !posts.length) {
+			return null;
+		}
+	
+		const post = posts[0];
+		post.isAdmin = await user.isAdministrator(uid);
+		
+		// Convert "official" value to a boolean
+		post.official = post.official === '1'; 
+	
+		return post;
 	};
 
 	Posts.getPostField = async function (pid, field) {

@@ -24,7 +24,8 @@ module.exports = function (Posts) {
 		if (!canEdit.flag) {
 			throw new Error(canEdit.message);
 		}
-		const postData = await Posts.getPostData(data.pid);
+		// const postData = await Posts.getPostData(data.pid);
+		const postData = await Posts.getPostData(data.pid, data.uid);
 		if (!postData) {
 			throw new Error('[[error:no-post]]');
 		}

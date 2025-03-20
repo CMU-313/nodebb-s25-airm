@@ -763,8 +763,8 @@
           "\" class=\"post-index text-muted d-none d-md-inline\">#" + 
           __escape(helper(context, helpers, 'increment', [guard((context != null && context['posts'] != null && context['posts'][key0] != null) ? context['posts'][key0]['index'] : null), "1"])) + 
           "</a>\n</div>\n</div>\n" + 
-          (guard((context != null) ? context['true'] : null) ?
-            "  <!-- This will always show the badge for testing -->\n<div class=\"official-badge text-success fw-bold mb-2\">\n<i class=\"fa fa-check-circle\"></i> Official Answer\n</div>\n" :
+          (guard((context != null && context['posts'] != null && context['posts'][key0] != null) ? context['posts'][key0]['official'] : null) ?
+            "\n<div class=\"official-badge text-success fw-bold mb-2\">\n<i class=\"fa fa-check-circle\"></i> Official Answer\n</div>\n" :
             "") + 
           "\n<div class=\"content mt-2 text-break\" component=\"post/content\" itemprop=\"text\">\n" + 
           __escape(guard((context != null && context['posts'] != null && context['posts'][key0] != null) ? context['posts'][key0]['content'] : null)) + 
@@ -815,7 +815,11 @@
           (guard((context != null && context['privileges'] != null) ? context['privileges']['topics:reply'] : null) ?
             "" :
             "hidden") + 
-          "\" title=\"[[topic:quote]]\"><i class=\"fa fa-fw fa-quote-right text-primary\"></i></a>\n<a component=\"post/mark-as-official\" href=\"#\" class=\"btn-ghost-sm text-success\" title=\"Mark as Official\">\n<i class=\"fa fa-check-circle\"></i> Mark as Official\n</a>\n" + 
+          "\" title=\"[[topic:quote]]\"><i class=\"fa fa-fw fa-quote-right text-primary\"></i></a>\n" + 
+          (guard((context != null) ? context['isAdmin'] : null) ?
+            "\n<a component=\"post/mark-as-official\" href=\"#\" class=\"btn-ghost-sm text-success\" title=\"Mark as Official\">\n<i class=\"fa fa-check-circle\"></i> Mark as Official\n</a>\n" :
+            "") + 
+          "\n" + 
           (guard((context != null) ? context['reputation:disabled'] : null) ?
             "" :
             "\n<div class=\"d-flex votes align-items-center\">\n<a component=\"post/upvote\" href=\"#\" class=\"btn-ghost-sm" + 

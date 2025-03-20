@@ -1,0 +1,58 @@
+{
+    "user": {
+        "username": "airm",
+        "userslug": "airm",
+        "joindate": "1738533660758",
+        "lastonline": "1738533660758",
+        "status": "online",
+        "uid": "1",
+        "password:shaWrapped": "1",
+        "email": "",
+        "email:confirmed": "0",
+        "groupTitle": "[\"administrators\"]",
+        "topiccount": "1",
+        "lastposttime": "1738533661162",
+        "postcount": "1",
+        "profileviews": "1"
+    },
+    "settings": null,
+    "ips": [],
+    "sessions": [],
+    "usernames": [
+        {
+            "value": "airm",
+            "timestamp": 1738533660758,
+            "timestampISO": "2025-02-02T22:01:00.758Z",
+            "byUid": ""
+        }
+    ],
+    "emails": [
+        {
+            "value": "mingxiy@andrew.cmu.edu",
+            "timestamp": 1738533661139,
+            "timestampISO": "2025-02-02T22:01:01.139Z",
+            "byUid": "1",
+            "byUser": {
+                "uid": 1,
+                "username": "airm",
+                "userslug": "airm",
+                "picture": null,
+                "displayname": "airm",
+                "icon:bgColor": "#2196f3",
+                "icon:text": "A"
+            }
+        }
+    ],
+    "messages": [],
+    "bookmarks": [],
+    "watchedTopics": [
+        {
+            "tid": "1",
+            "title": "Welcome to your NodeBB!",
+            "timestamp": "1738533661160"
+        }
+    ],
+    "upvoted": [],
+    "downvoted": [],
+    "following": []
+}

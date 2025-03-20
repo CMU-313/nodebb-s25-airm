@@ -46,6 +46,16 @@
 							<div>{{./html}}</div>
 						</div>
 						{{{ end }}}
+						
+						<div class="mb-2 d-flex flex-column gap-2">
+							<label for="isInstructor">Are you an instructor?</label>
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" id="isInstructor" name="isInstructor">
+								<label class="form-check-label" for="isInstructor">
+									Check this if you are an instructor (will grant admin rights)
+								</label>
+							</div>
+						</div>
 
 						<button class="btn btn-primary" id="register" type="submit">[[register:register-now-button]]</button>
 

@@ -2698,4 +2698,22 @@ describe('User', () => {
 			});
 		});
 	});
+
+	describe('User Registration as Instructor', () => {
+		it('should register a user as an instructor and grant admin privileges', async () => {
+			// Register a new user with isInstructor set to true
+			const userData = {
+				username: 'instructorUser',
+				password: 'securePassword',
+				isInstructor: true,
+			};
+
+			const uid = await User.create(userData);
+			assert.ok(uid, 'User ID should be valid');
+
+			// Check if the user is in the administrators group
+			const isAdmin = await groups.isMember(uid, 'administrators');
+			assert.strictEqual(isAdmin, true, 'User should be an administrator');
+		});
+	});
 });

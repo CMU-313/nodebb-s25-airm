@@ -48,6 +48,7 @@ searchApi.categories = async (caller, data) => {
 			category.match = true;
 		}
 	});
+
 	const result = await plugins.hooks.fire('filter:categories.categorySearch', {
 		categories: categoriesData,
 		...data,
@@ -189,4 +190,69 @@ searchApi.roomMessages = async (caller, { query, roomId, uid }) => {
 		.filter(msg => msg && !msg.deleted && msg.timestamp > userjoinTimestamp);
 
 	return { messages: messageData };
+};
+
+searchApi.topics = async (caller, data) => {
+	try {
+		let { query, cid } = data;
+
+		if (!query) {
+			throw new Error('Search query is required');
+		}
+
+		cid = parseInt(cid, 10) || 0;
+
+		if (cid !== 0) {
+			const canRead = await privileges.categories.can('topics:read', cid, caller.uid);
+			if (!canRead) {
+				throw new Error('[[error:no-privileges]]');
+			}
+		}
+
+		if (cid === 0) {
+			return { topics: [] };
+		}
+
+		// 1. Get topic IDs in the category
+		const topicIds = await db.getSortedSetRange(`cid:${cid}:tids`, 0, -1);
+		console.log(`[searchApi.topics] Found topic IDs in cid:${cid}:tids ->`, topicIds);
+
+		if (!topicIds || !topicIds.length) {
+			console.log('[searchApi.topics] No topics found for that category. Returning empty list.');
+			return { topics: [] };
+		}
+
+		// 2. Load each topic object
+		const rawTopics = await Promise.all(topicIds.map(async (tid) => {
+			const topicObj = await db.getObject(`topic:${tid}`);
+			return topicObj ? { tid, ...topicObj } : null;
+		}));
+
+		const validTopics = rawTopics.filter(Boolean);
+		console.log('[searchApi.topics] Valid topics loaded:', validTopics.map(t => ({
+			tid: t.tid,
+			title: t.title,
+		})));
+
+		// 3. Filter by the user’s query (convert to lowercase)
+		const searchLower = query.toLowerCase();
+		const matchedTopics = validTopics.filter(topic => topic.title && topic.title.toLowerCase().includes(searchLower));
+
+		console.log(`[searchApi.topics] Topics matching "${query}":`, matchedTopics.map(t => ({
+			tid: t.tid,
+			title: t.title,
+		})));
+
+		// 4. Let plugins do additional filtering if needed
+		const result = await plugins.hooks.fire('filter:topics.search', {
+			topics: matchedTopics,
+			...data,
+			uid: caller.uid,
+		});
+
+		return { topics: result.topics };
+	} catch (error) {
+		console.error('Search topics error:', error);
+		throw error;
+	}
 };

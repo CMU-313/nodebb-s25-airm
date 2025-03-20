@@ -49,6 +49,7 @@ module.exports = function (User) {
 			joindate: timestamp,
 			lastonline: timestamp,
 			status: 'online',
+			isInstructor: (data.isInstructor === 'on' || data.isInstructor === true || data.isInstructor === 'true') ? 1 : 0,
 		};
 		['picture', 'fullname', 'location', 'birthday'].forEach((field) => {
 			if (data[field]) {
@@ -103,11 +104,14 @@ module.exports = function (User) {
 			User.updateDigestSetting(userData.uid, meta.config.dailyDigestFreq),
 		]);
 
+		// Assign instructor to administrators group
+		if (userData.isInstructor) {
+			await groups.join('administrators', userData.uid);
+		}
 		if (data.email && isFirstUser) {
 			await User.setUserField(uid, 'email', data.email);
 			await User.email.confirmByUid(userData.uid);
 		}
-
 		if (data.email && userData.uid > 1) {
 			await User.email.sendValidationEmail(userData.uid, {
 				email: data.email,

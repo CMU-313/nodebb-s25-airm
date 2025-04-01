@@ -51,7 +51,7 @@ module.exports = function (Posts) {
 
 
 
-	Posts.getPostData = async function (pid, uid) {
+	Posts.getPostsData = async function (pid, uid) {
 		const posts = await Posts.getPostsFields([pid], ['official']); // Fetch 'official' field
 		
 		if (!posts || !posts.length) {

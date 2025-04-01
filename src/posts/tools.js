@@ -15,8 +15,7 @@ module.exports = function (Posts) {
 
 	async function togglePostDelete(uid, pid, isDelete) {
 		const [postData, canDelete] = await Promise.all([
-			// Posts.getPostData(pid),
-			Posts.getPostData(pid, uid),
+			Posts.getPostData(pid),
 			privileges.posts.canDelete(pid, uid),
 		]);
 		if (!postData) {

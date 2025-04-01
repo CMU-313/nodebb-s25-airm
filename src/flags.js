@@ -666,8 +666,7 @@ Flags.getTarget = async function (type, id, uid) {
 		return userData && userData.uid ? userData : {};
 	}
 	if (type === 'post') {
-		// let postData = await posts.getPostData(id);
-		let postData = await posts.getPostData(id, uid);
+		let postData = await posts.getPostData(id);
 		if (!postData) {
 			return {};
 		}

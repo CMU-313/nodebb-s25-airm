@@ -32,9 +32,7 @@ module.exports = function (Topics) {
 		}
 
 		const [postData, isAdminOrMod] = await Promise.all([
-			// posts.getPostData(mainPid),
-			posts.getPostData(mainPid, uid),
-
+			posts.getPostData(mainPid),
 			privileges.categories.isAdminOrMod(cid, uid),
 		]);
 

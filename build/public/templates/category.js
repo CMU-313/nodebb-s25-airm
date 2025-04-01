@@ -86,7 +86,7 @@
       __escape(guard((context != null) ? context['totalPostCount'] : null)) + 
       "\" class=\"fw-bold\">" + 
       __escape(helper(context, helpers, 'humanReadableNumber', [guard((context != null) ? context['totalPostCount'] : null)])) + 
-      "</span>\n<span class=\"text-lowercase fw-normal\">[[global:posts]]</span>\n</span>\n</div>\n<!-- Search bar for topics in this category -->\n<div class=\"category-search-container d-flex justify-content-center mt-2\">\n<input type=\"text\" id=\"category-search\" placeholder=\"Search topics...\" class=\"form-control w-50\">\n</div>\n<!-- Container for displaying search results -->\n<div id=\"category-search-results\" class=\"search-results mt-3\"></div>\n</div>\n" + 
+      "</span>\n<span class=\"text-lowercase fw-normal\">[[global:posts]]</span>\n</span>\n</div>\n</div>\n" + 
       (guard((context != null && context['widgets'] != null && context['widgets']['header'] != null) ? context['widgets']['header']['length'] : null) ?
         "\n<div data-widget-area=\"header\">\n" + 
           compiled.blocks['widgets.header'](helpers, context, guard, iter, helper) + 
@@ -657,14 +657,7 @@
               "\" data-page=\"" + 
               __escape(guard((context != null && context['pagination'] != null) ? context['pagination']['pageCount'] : null)) + 
               "\" aria-label=\"[[global:pagination.lastpage]]\"><i class=\"fa fa-fast-forward\"></i> </a>\n</li>\n</ul>\n") + 
-          "\n</nav>\n</noscript>\n") + 
-      "\n<script>\ndocument.addEventListener('DOMContentLoaded', () => {\nconst searchInput = document.getElementById('category-search');\nconst resultsContainer = document.getElementById('category-search-results');\nconst cid = parseInt('" + 
-      __escape(guard((context != null) ? context['cid'] : null)) + 
-      "', 10) || 1;\nsearchInput.addEventListener('keyup', async (evt) => {\nif (evt.key === 'Enter') {\nconst query = searchInput.value.trim();\nif (!query) return;\ntry {\nconst response = await fetch('/api/search/topics?cid=' + cid + '&query=' + encodeURIComponent(query));\nconst data = await response.json();\nrenderSearchResults(data);\n} catch (err) {\nconsole.error('[Category Search] Error:', err);\n}\n}\n});\nfunction renderSearchResults(data) {\nresultsContainer.innerHTML = '';\nif (!data.topics || !data.topics.length) {\nresultsContainer.innerHTML = '<div class=\"alert alert-info\">No matching topics found.</div>';\nreturn;\n}\ndata.topics.forEach(topic => {\nconst topicDiv = document.createElement('div');\ntopicDiv.innerHTML = `\n<a href=\"/topic/$" + 
-      __escape(guard((context != null && context['topic'] != null) ? context['topic']['tid'] : null)) + 
-      "\" class=\"d-block text-decoration-none p-2 border-bottom\">\n$" + 
-      __escape(guard((context != null && context['topic'] != null) ? context['topic']['title'] : null)) + 
-      "\n</a>\n`;\nresultsContainer.appendChild(topicDiv);\n});\n}\n});\n</script>";
+          "\n</nav>\n</noscript>\n");
   }
 
   compiled.blocks = {

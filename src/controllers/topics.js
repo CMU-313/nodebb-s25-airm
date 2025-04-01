@@ -225,8 +225,8 @@ async function addTags(topicData, req, res, currentPage) {
 
 	let mainPost = topicData.posts.find(p => parseInt(p.index, 10) === 0);
 	if (!mainPost) {
-		// mainPost = await posts.getPostData(topicData.mainPid);
-		mainPost = await posts.getPostData(topicData.mainPid, uid);
+		mainPost = await posts.getPostData(topicData.mainPid);
+		// mainPost = await posts.getPostData(topicData.mainPid, uid);
 
 	}
 

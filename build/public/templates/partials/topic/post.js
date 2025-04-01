@@ -63,6 +63,10 @@
       "\">" + 
       __escape(guard((context != null && context['posts'] != null && context['posts']['user'] != null) ? context['posts']['user']['displayname'] : null)) + 
       "</a>\n" + 
+      (guard((context != null && context['posts'] != null) ? context['posts']['official'] : null) ?
+        "\n<span class=\"badge bg-success text-white ms-2\">Official Answer</span>\n" :
+        "") + 
+      "\n" + 
       compiled.blocks['posts.user.selectedGroups'](helpers, context, guard, iter, helper) + 
       "\n" + 
       (guard((context != null && context['posts'] != null && context['posts']['user'] != null) ? context['posts']['user']['banned'] : null) ?
@@ -98,12 +102,14 @@
       __escape(guard((context != null) ? context['pid'] : null)) + 
       "\" class=\"post-index text-muted d-none d-md-inline\">#" + 
       __escape(helper(context, helpers, 'increment', [guard((context != null) ? context['index'] : null), "1"])) + 
-      "</a>\n</div>\n</div>\n" + 
-      (guard((context != null && context['posts'] != null) ? context['posts']['official'] : null) ?
-        "\n<div class=\"official-badge text-success fw-bold mb-2\">\n<i class=\"fa fa-check-circle\"></i> Official Answer\n</div>\n" :
-        "") + 
-      "\n<div class=\"content mt-2 text-break\" component=\"post/content\" itemprop=\"text\">\n" + 
+      "</a>\n</div>\n</div>\n<div class=\"content mt-2 text-break\" component=\"post/content\" itemprop=\"text\">\n" + 
       __escape(guard((context != null && context['posts'] != null) ? context['posts']['content'] : null)) + 
+      "\n" + 
+      (guard((context != null && context['posts'] != null) ? context['posts']['isEnglish'] : null) ?
+        "" :
+        "\n<div class=\"sensitive-content-message\">\n<a class=\"btn btn-sm btn-primary view-translated-btn\">Click here to view the translated message.</a>\n</div>\n<div class=\"translated-content\" style=\"display:none;\">\n" + 
+          __escape(guard((context != null && context['posts'] != null) ? context['posts']['translatedContent'] : null)) + 
+          "\n</div>\n") + 
       "\n</div>\n</div>\n</div>\n<div component=\"post/footer\" class=\"post-footer border-bottom pb-2\">\n" + 
       (guard((context != null && context['posts'] != null && context['posts']['user'] != null) ? context['posts']['user']['signature'] : null) ?
         "\n<div component=\"post/signature\" data-uid=\"" + 
@@ -144,11 +150,7 @@
       (guard((context != null && context['privileges'] != null) ? context['privileges']['topics:reply'] : null) ?
         "" :
         "hidden") + 
-      "\" title=\"[[topic:quote]]\"><i class=\"fa fa-fw fa-quote-right text-primary\"></i></a>\n" + 
-      (guard((context != null) ? context['isAdmin'] : null) ?
-        "\n<a component=\"post/mark-as-official\" href=\"#\" class=\"btn-ghost-sm text-success\" title=\"Mark as Official\">\n<i class=\"fa fa-check-circle\"></i> Mark as Official\n</a>\n" :
-        "") + 
-      "\n" + 
+      "\" title=\"[[topic:quote]]\"><i class=\"fa fa-fw fa-quote-right text-primary\"></i></a>\n<a component=\"post/mark-as-official\" href=\"#\" class=\"btn-ghost-sm text-success\" title=\"Mark as Official\">\n<i class=\"fa fa-check-circle\"></i> Mark as Official\n<\t\t/a>\n" + 
       (guard((context != null) ? context['reputation:disabled'] : null) ?
         "" :
         "\n<div class=\"d-flex votes align-items-center\">\n<a component=\"post/upvote\" href=\"#\" class=\"btn-ghost-sm" + 

@@ -1,4 +1,3 @@
-
 'use strict';
 
 const db = require('../database');
@@ -27,29 +26,10 @@ module.exports = function (Posts) {
 		return result.posts;
 	};
 
-	const user = require('../user'); // Ensure user module is included
-
-	Posts.getPostData = async function (pid, uid) {
-		console.log(`DEBUG: Fetching post data for pid=${pid}, uid=${uid}`);
-	
+	Posts.getPostData = async function (pid) {
 		const posts = await Posts.getPostsFields([pid], []);
-		if (!posts || !posts.length) {
-			console.log(`DEBUG: No post found for pid=${pid}`);
-			return null;
-		}
-	
-		const post = posts[0];
-		
-		// ✅ Check if the user is an admin and store it in the post data
-		post.isAdmin = await user.isAdministrator(uid); 
-	
-		console.log(`DEBUG: Post ${pid} - isAdmin=${post.isAdmin}`);
-	
-		return post;
+		return posts && posts.length ? posts[0] : null;
 	};
-	
-
-
 
 	Posts.getPostsData = async function (pids) {
 		return await Posts.getPostsFields(pids, []);
@@ -87,7 +67,5 @@ function modifyPost(post, fields) {
 		if (post.hasOwnProperty('edited')) {
 			post.editedISO = post.edited !== 0 ? utils.toISOString(post.edited) : '';
 		}
-		// Mark post as "English" if decided by translator service or if it has no info
-		post.isEnglish = post.isEnglish == "true" || post.isEnglish === undefined;
 	}
 }

@@ -48,12 +48,6 @@
 <span class="text-lowercase fw-normal">[[global:posts]]</span>
 </span>
 </div>
-<!-- Search bar for topics in this category -->
-<div class="category-search-container d-flex justify-content-center mt-2">
-<input type="text" id="category-search" placeholder="Search topics..." class="form-control w-50">
-</div>
-<!-- Container for displaying search results -->
-<div id="category-search-results" class="search-results mt-3"></div>
 </div>
 {{{ if widgets.header.length }}}
 <div data-widget-area="header">
@@ -891,9 +885,9 @@
 </div>
 </div>
 <div data-widget-area="footer">
-{{{ each widgets.footer }}}
+{{{each widgets.footer}}}
 {{widgets.footer.html}}
-{{{ end }}}
+{{{end}}}
 </div>
 {{{ if !config.usePagination }}}
 <noscript>
@@ -939,39 +933,3 @@
 </nav>
 </noscript>
 {{{ end }}}
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-const searchInput = document.getElementById('category-search');
-const resultsContainer = document.getElementById('category-search-results');
-const cid = parseInt('{./cid}', 10) || 1;
-searchInput.addEventListener('keyup', async (evt) => {
-if (evt.key === 'Enter') {
-const query = searchInput.value.trim();
-if (!query) return;
-try {
-const response = await fetch('/api/search/topics?cid=' + cid + '&query=' + encodeURIComponent(query));
-const data = await response.json();
-renderSearchResults(data);
-} catch (err) {
-console.error('[Category Search] Error:', err);
-}
-}
-});
-function renderSearchResults(data) {
-resultsContainer.innerHTML = '';
-if (!data.topics || !data.topics.length) {
-resultsContainer.innerHTML = '<div class="alert alert-info">No matching topics found.</div>';
-return;
-}
-data.topics.forEach(topic => {
-const topicDiv = document.createElement('div');
-topicDiv.innerHTML = `
-<a href="/topic/${topic.tid}" class="d-block text-decoration-none p-2 border-bottom">
-${topic.title}
-</a>
-`;
-resultsContainer.appendChild(topicDiv);
-});
-}
-});
-</script>

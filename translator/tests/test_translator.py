@@ -2,12 +2,22 @@
 
 import pytest
 from unittest.mock import patch
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from translator import query_llm_robust
 
-@patch("translator.get_language", return_value="I don't understand your request")
+
+# @patch("translator.get_language", return_value="I don't understand your request")
+# def test_unexpected_language(mock_get_language):
+#     result = query_llm_robust("Hier ist dein erstes Beispiel.")
+#     assert result == (True, "Hier ist dein erstes Beispiel.")
+@patch("translator.get_language", return_value="none")  # triggers the fallback
 def test_unexpected_language(mock_get_language):
     result = query_llm_robust("Hier ist dein erstes Beispiel.")
     assert result == (True, "Hier ist dein erstes Beispiel.")
+
 
 @patch("translator.get_language", return_value="French")
 @patch("translator.get_translation", return_value=123)

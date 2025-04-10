@@ -20,10 +20,10 @@ RUN find . -mindepth 1 -maxdepth 1 -name '.*' ! -name '.' ! -name '..' -exec bas
 # Prepage package.json
 RUN cp /usr/src/app/install/package.json /usr/src/app/
 
-# RUN apt-get update \
-#     && DEBIAN_FRONTEND=noninteractive \
-#     apt-get -y --no-install-recommends install \
-#         tini
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive \
+    apt-get -y --no-install-recommends install \
+        tini
 
 RUN groupadd --gid ${GID} ${USER} \
     && useradd --uid ${UID} --gid ${GID} --home-dir /usr/src/app/ --shell /bin/bash ${USER} \
@@ -53,7 +53,7 @@ RUN corepack enable \
     && chown -R ${USER}:${USER} /usr/src/app/ /opt/config/
 
 COPY --from=build --chown=${USER}:${USER} /usr/src/app/ /usr/src/app/install/docker/setup.json /usr/src/app/
-#COPY --from=build --chown=${USER}:${USER} /usr/bin/tini /usr/src/app/install/docker/entrypoint.sh /usr/local/bin/
+COPY --from=build --chown=${USER}:${USER} /usr/bin/tini /usr/src/app/install/docker/entrypoint.sh /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/entrypoint.sh \
     && chmod +x /usr/local/bin/tini
@@ -72,5 +72,4 @@ VOLUME ["/usr/src/app/node_modules", "/usr/src/app/build", "/usr/src/app/public/
 # This approach is crucial to circumvent issues with unmanaged subprocesses and signal handling in containerised environments.
 # By integrating tini, we enhance the reliability and stability of our Docker containers.
 # Ensures smooth start-up and shutdown processes, and reliable, safe handling of signal processing.
-#ENTRYPOINT ["tini", "--", "entrypoint.sh"]
-ENTRYPOINT ["bash", "entrypoint.sh"]
+ENTRYPOINT ["tini", "--", "entrypoint.sh"]
